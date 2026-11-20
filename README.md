@@ -8,6 +8,11 @@ This allows breaking changes within Psalm's plugin API, without requiring a majo
 
 ## Changelog
 
+### `0.6.0`
+
+- [BC] `Psalm\Type\TaintKind::INPUT_SQL` now only covers SQL that breaks out of quotes (vimeo/psalm#14400). The new `INPUT_SQL_UNQUOTED` covers SQL syntax outside of quotes, which `real_escape_string()` and the other escapes that rely on quotes don't remove. In annotations, `sql` names both, and `sql_in_quotes` names `INPUT_SQL` alone. A plugin declaring an SQL sink, or an escape that adds the quotes itself, with the constants should use `INPUT_SQL | INPUT_SQL_UNQUOTED`; an escape that only works inside quotes keeps `INPUT_SQL`.
+- New taint kinds `html_attribute` (`TaintKind::INPUT_HTML_ATTRIBUTE`, reported as `TaintedHtmlAttribute`) and `url_scheme` (`TaintKind::INPUT_URL_SCHEME`, reported as `TaintedUrlScheme`), part of `input` (vimeo/psalm#14400). `htmlspecialchars()` and `htmlentities()` keep them, and Psalm reports them where the markup before a value puts it in an unquoted attribute value, or at the start of a URL a browser runs as script. An escaping function that leaves no whitespace, or that fixes the scheme, can declare `@psalm-taint-escape html_attribute` or `@psalm-taint-escape url_scheme`. `TaintKind::USER_SECRET` and `SYSTEM_SECRET` move up three bits, and `ALL_INPUT`, `BUILTIN_TAINT_COUNT` and `TAINT_NAMES` change accordingly: use them symbolically.
+
 ### `0.5.1`
 
 - `Psalm\Issue\CodeIssue::CWE_IDS` lists the ids of the [CWE](https://cwe.mitre.org/) weaknesses an issue flags, the most specific first (vimeo/psalm#14156). A plugin issue declares its own: `public const CWE_IDS = [89];`. Reports show them after the message, the JSON report in `cwe_ids`, and the SARIF report as `external/cwe/cwe-NNN` rule tags; the SARIF `ruleId` is now the issue type rather than its shortcode.
