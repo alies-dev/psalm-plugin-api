@@ -8,6 +8,10 @@ This allows breaking changes within Psalm's plugin API, without requiring a majo
 
 ## Changelog
 
+### `0.6.0`
+
+- [BC] `Psalm\Storage\ClassLikeStorage#$potential_declaring_method_ids` was removed (vimeo/psalm#14931). It held, for each method a class inherits, the ids of the methods up the hierarchy that a call to it can reach. To find the method a call runs, use `Psalm\Codebase#getDeclaringMethodId()` (or `ClassLikeStorage#$declaring_method_ids`); for the class a method appears in, `Codebase#getAppearingMethodId()`; for the calls of a method, `Codebase#findReferencesToMethod()`. The new `ClassLikeStorage#$inherited_method_sources` that replaces it internally is `@internal`.
+
 ### `0.5.3`
 
 - [BC] `Psalm\Type\Atomic\TObjectWithProperties#toPhpString()` now returns `?string`, like `Psalm\Type\Atomic#toPhpString()` (vimeo/psalm#14933). It returns `object` from PHP 7.2 and null for older analysed PHP versions, which have no `object` type: check the result for null. It ships in a patch release because it only affects code that calls this method on a `TObjectWithProperties` and expects a string.
