@@ -8,9 +8,9 @@ This allows breaking changes within Psalm's plugin API, without requiring a majo
 
 ## Changelog
 
-### `0.6.0`
+### `0.5.3`
 
-- [BC] `Psalm\Type\Atomic\TObjectWithProperties#toPhpString()` now returns `?string`, like `Psalm\Type\Atomic#toPhpString()` (vimeo/psalm#14933). It returns `object` from PHP 7.2 and null for older analysed PHP versions, which have no `object` type: check the result for null.
+- [BC] `Psalm\Type\Atomic\TObjectWithProperties#toPhpString()` now returns `?string`, like `Psalm\Type\Atomic#toPhpString()` (vimeo/psalm#14933). It returns `object` from PHP 7.2 and null for older analysed PHP versions, which have no `object` type: check the result for null. It ships in a patch release because it only affects code that calls this method on a `TObjectWithProperties` and expects a string.
 
 ### `0.5.2`
 
