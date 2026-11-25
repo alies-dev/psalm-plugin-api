@@ -8,6 +8,10 @@ This allows breaking changes within Psalm's plugin API, without requiring a majo
 
 ## Changelog
 
+### `0.6.0`
+
+- [BC] `Psalm\Type\Atomic\TObjectWithProperties#toPhpString()` now returns `?string`, like `Psalm\Type\Atomic#toPhpString()` (vimeo/psalm#14933). It returns `object` from PHP 7.2 and null for older analysed PHP versions, which have no `object` type: check the result for null.
+
 ### `0.5.2`
 
 - [BC] `Psalm\Type\TaintKind::INPUT_SQL` now only covers SQL that breaks out of quotes (vimeo/psalm#14400). The new `INPUT_SQL_UNQUOTED` covers SQL syntax outside of quotes, which `real_escape_string()` and the other escapes that rely on quotes don't remove. In annotations, `sql` names both, and `sql_in_quotes` names `INPUT_SQL` alone. A plugin declaring an SQL sink, or an escape that adds the quotes itself, with the constants should use `INPUT_SQL | INPUT_SQL_UNQUOTED`; an escape that only works inside quotes keeps `INPUT_SQL`. This change shipped in Psalm 7.13.2 with plugin API `0.5.1`, so it is listed here instead of in a minor release.
